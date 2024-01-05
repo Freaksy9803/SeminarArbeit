@@ -1,24 +1,31 @@
 pipeline {
 
     agent any
-
+    tools{
+        maven 'Maven'
+    }
     stages {
 
         stage('Build') {
             steps {
-                echo 'building the application...'
+                sh "mvn clean install"
             }
         }
 
         stage('Test') {
+            when {
+                expression {
+                    BRANCH_NAME == 'dev'
+                }
+            }
             steps {
-                echo 'testing the application...'
+                sh "mvn test"
             }
         }
 
         stage('Deploy') {
             steps {
-                echo 'deploying the application...'
+                echo 'mvn deploy'
             }
         }
     }
